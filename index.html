@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#fdf2f5">
 <title>Listening Test 33</title>
 <style>
@@ -330,7 +329,6 @@ button,input{font-family:inherit}
 
 /* ===================== CẤU HÌNH ===================== */
 var TEACHER_EMAIL = "ddangminh1905@gmail.com";   // Gmail nhận bài
-var WEB3FORMS_KEY = "";   // tùy chọn: access key Web3Forms của Gmail nhận bài, để trống thì chỉ dùng FormSubmit
 var MAX_LISTENS = 2;
 var STORE_PREFIX = "pinkListening33_v1_";
 var LETTERS = ["A","B","C"];
@@ -890,6 +888,10 @@ function payloadText(p){
   var lines = [];
   if(p._subject) lines.push(p._subject);
   lines.push("");
+  if(p.answers){
+    lines.push(p.answers);
+    return lines.join("\n");
+  }
   Object.keys(p).forEach(function(k){
     if(k.charAt(0) === "_") return;
     lines.push(k.replace(/_/g, " ") + ": " + p[k]);
@@ -897,63 +899,43 @@ function payloadText(p){
   return lines.join("\n");
 }
 
-/* gửi qua mạng: thử lần lượt từng đường, mỗi đường thử lại khi lỗi, có giới hạn thời gian */
+/* gửi qua FormSubmit, cùng cách gửi với bài kiểm tra đang chạy tốt */
 function delay(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
-function postJson(url, body){
+function toBody(p){
+  var b = {_subject: String(p._subject || "Listening Test 33")}, rows = [];
+  Object.keys(p).forEach(function(k){
+    if(k.charAt(0) === "_") return;
+    if(/^Cau_\d+$/.test(k)){ rows.push(k.replace("_", " ") + ": " + p[k]); return; }
+    b[k] = String(p[k]);
+  });
+  if(!b.answers && rows.length) b.answers = rows.join("\n");
+  return b;
+}
+function sendOnce(p){
   var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
-  var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 20000) : null;
-  return fetch(url, {
+  var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 25000) : null;
+  return fetch("https://formsubmit.co/ajax/" + TEACHER_EMAIL, {
     method:"POST",
     headers:{"Content-Type":"application/json", "Accept":"application/json"},
-    body:JSON.stringify(body),
+    body:JSON.stringify(toBody(p)),
     signal: ctrl ? ctrl.signal : undefined
   }).then(function(res){
     if(timer) clearTimeout(timer);
-    return res.json().catch(function(){ return {}; }).then(function(data){ return {ok:res.ok, data:data || {}}; });
+    return res.json().catch(function(){ return {}; }).then(function(data){
+      var s = data && data.success;
+      if(!res.ok || s === false || s === "false"){
+        throw new Error((data && data.message) || ("http " + res.status));
+      }
+    });
   }, function(err){
     if(timer) clearTimeout(timer);
     throw err;
   });
 }
-function stringify(p){
-  var o = {};
-  Object.keys(p).forEach(function(k){ o[k] = String(p[k]); });
-  return o;
-}
-function viaWeb3Forms(p){
-  return postJson("https://api.web3forms.com/submit", {
-    access_key: WEB3FORMS_KEY,
-    subject: p._subject,
-    from_name: p.Ho_ten,
-    name: p.Ho_ten,
-    score: p.Diem,
-    answers: payloadText(p)
-  }).then(function(r){
-    if(!(r.ok && r.data.success === true)) throw new Error("web3forms");
-  });
-}
-function viaFormSubmit(p){
-  return postJson("https://formsubmit.co/ajax/" + TEACHER_EMAIL, stringify(p)).then(function(r){
-    var s = r.data.success;
-    if(!r.ok || s === false || s === "false") throw new Error(r.data.message || "formsubmit");
-  });
-}
-function withRetry(fn, p, times){
-  return fn(p).catch(function(err){
-    if(times <= 1) throw err;
-    return delay(1500).then(function(){ return withRetry(fn, p, times - 1); });
-  });
-}
 function trySend(p){
-  var routes = [];
-  if(WEB3FORMS_KEY) routes.push(viaWeb3Forms);
-  routes.push(viaFormSubmit);
-  var i = 0;
-  function next(err){
-    if(i >= routes.length) return Promise.reject(err || new Error("send failed"));
-    return withRetry(routes[i++], p, 2).catch(next);
-  }
-  return next();
+  return sendOnce(p).catch(function(){
+    return delay(2000).then(function(){ return sendOnce(p); });
+  });
 }
 
 function updatePendBox(msg){
@@ -1060,7 +1042,7 @@ function submitQuiz(){
   if(!name){ flagName(); return; }
   var st = loadState(name);
   var attemptNo = st.attempts.length + 1;
-  var score = 0, rows = {}, blank = 0;
+  var score = 0, rows = [], blank = 0;
   var practice = unlocked;
 
   QUESTIONS.forEach(function(q){
@@ -1070,7 +1052,7 @@ function submitQuiz(){
     if(ok) score++;
     if(!answered) blank++;
     mark(q, ok, answered);
-    rows["Cau_" + pad2(q.n)] = showAnswer(q, a) + "  =>  " + (ok ? "Đúng" : "Sai");
+    rows.push("Câu " + q.n + ": " + showAnswer(q, a) + "  =>  " + (ok ? "Đúng" : "Sai"));
   });
 
   var when = new Date().toLocaleString("vi-VN");
@@ -1085,20 +1067,30 @@ function submitQuiz(){
   $("jumpBtn").hidden = score === TOTAL;
   $("result").classList.add("show");
 
+  var modeText = practice ? "Luyện tập (đã nhập mật khẩu)" : "Làm bài thường";
+  var l1 = practice ? "Nghe tùy ý" : (Math.min(st.listens[0], MAX_LISTENS) + " / " + MAX_LISTENS);
+  var l2 = practice ? "Nghe tùy ý" : (Math.min(st.listens[1], MAX_LISTENS) + " / " + MAX_LISTENS);
+  var lines = [
+    "Học sinh: " + name,
+    "Đề: Listening Test 33",
+    "Lần làm: " + attemptNo,
+    "Điểm: " + score + " / " + TOTAL,
+    "Chế độ: " + modeText,
+    "Số câu bỏ trống: " + blank,
+    "Lượt nghe Part 1: " + l1,
+    "Lượt nghe Part 2: " + l2,
+    "Thời gian nộp: " + when,
+    ""
+  ].concat(rows);
+
   var payload = {
-    _subject: "Listening Test 33 | " + name + " | Lần " + attemptNo + " | " + score + "/" + TOTAL + (practice ? " | Luyện tập" : ""),
-    _template: "table",
-    _captcha: "false",
-    Ho_ten: name,
-    Lan_lam: attemptNo,
-    Diem: score + " / " + TOTAL,
-    Che_do: practice ? "Luyện tập (đã nhập mật khẩu)" : "Làm bài thường",
-    So_cau_bo_trong: blank,
-    Luot_nghe_Part_1: practice ? "Nghe tùy ý" : (Math.min(st.listens[0], MAX_LISTENS) + " / " + MAX_LISTENS),
-    Luot_nghe_Part_2: practice ? "Nghe tùy ý" : (Math.min(st.listens[1], MAX_LISTENS) + " / " + MAX_LISTENS),
-    Thoi_gian_nop: when
+    _subject: "Kết quả Listening Test 33: " + name + ", lần " + attemptNo + ", " + score + "/" + TOTAL + (practice ? ", luyện tập" : ""),
+    name: name,
+    score: score + " / " + TOTAL,
+    attempt: String(attemptNo),
+    mode: modeText,
+    answers: lines.join("\n")
   };
-  Object.keys(rows).forEach(function(k){ payload[k] = rows[k]; });
 
   var item = {name:name, attemptNo:attemptNo, payload:payload};
   addPending(item);   // lưu trước khi gửi, nếu tắt trang hoặc mất mạng thì lần sau tự gửi lại
