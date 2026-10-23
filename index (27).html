@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#fdf2f5">
+<title>Listening Test 33</title>
+<style>
+:root{
+  --bg:#fdf2f5;
+  --card:rgba(255,255,255,.93);
+  --line:#efc4d2;
+  --rose:#b23a6a;
+  --rose-deep:#8f2c54;
+  --rose-soft:#e9a3bb;
+  --rose-pale:#fdeaf0;
+  --ink:#3b2630;
+  --muted:#7a5d68;
+  --ok:#2e7d4f;
+  --ok-bg:#e4f3e9;
+  --no:#c0392b;
+  --no-bg:#fdeae7;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;color:var(--ink);
+  font-family:"Times New Roman",Times,"Liberation Serif","Noto Serif",serif;font-size:17px;line-height:1.65;
+  background:linear-gradient(180deg,#fdf5f8 0%,#fbe9f0 55%,#fdf5f8 100%);
+  background-attachment:fixed;overflow-x:hidden;
+}
+::selection{background:rgba(233,163,187,.55)}
+button,input{font-family:inherit}
+
+.deco{position:fixed;z-index:0;pointer-events:none;opacity:.55}
+.deco.d1{top:-52px;right:-44px;width:230px;height:230px}
+.deco.d2{bottom:-64px;left:-52px;width:250px;height:250px}
+.sym{position:absolute;width:0;height:0;overflow:hidden}
+
+.hero{position:relative;z-index:2;text-align:center;padding:44px 18px 22px}
+.hero-flower{width:64px;height:64px;display:block;margin:0 auto 8px;color:#f0a9c0}
+.hero h1{margin:0;font-weight:700;letter-spacing:.5px;line-height:1.15;font-size:clamp(34px,7vw,52px);color:var(--rose)}
+.hero p{margin:10px auto 0;max-width:540px;color:var(--muted);font-size:17px}
+
+.wrap{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:6px 16px 90px}
+
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+.box h2{margin:0 0 10px;font-weight:700;font-size:23px;color:var(--rose)}
+.box ul{margin:0;padding-left:20px}
+.box li{margin-bottom:7px}
+.box li:last-child{margin-bottom:0}
+
+.name-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.name-box label,.lock-box label{font-weight:700;color:var(--rose)}
+.chip{font-size:15px;padding:2px 12px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:#fff}
+.chip.on{color:var(--rose-deep);background:var(--rose-pale);border-color:var(--rose-soft)}
+.name-box input,.lock-box input{width:100%;padding:11px 13px;font-size:18px;color:var(--ink);background:#fff;
+  border:1px solid var(--line);border-radius:10px}
+.name-box input:focus,.lock-box input:focus{outline:2px solid var(--rose);border-color:var(--rose)}
+.err{display:none;margin-top:8px;color:var(--no);font-weight:700;font-size:16px}
+.name-box.bad input{border-color:var(--no)}
+.name-box.bad .err{display:block}
+.lock-box.bad input{border-color:var(--no)}
+.lock-box.bad .err{display:block}
+.pw-row{display:flex;gap:10px;margin-top:8px}
+.pw-row input{flex:1;min-width:0}
+.lock-on{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.lock-on .grow{flex:1 1 200px}
+.lock-on[hidden],.pend[hidden],#lockForm[hidden]{display:none}
+
+.pend{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-color:var(--no)}
+.pend span{flex:1 1 220px}
+
+.partWrap{margin-bottom:10px}
+.part{margin:32px 0 14px}
+.part h2{margin:0;font-weight:700;font-size:30px;color:var(--rose)}
+.part p{margin:4px 0 0;color:var(--muted);font-style:italic}
+.part::after{content:"";display:block;height:2px;margin-top:10px;border-radius:2px;
+  background:linear-gradient(90deg,var(--rose-soft),rgba(233,163,187,0))}
+.gap-title{margin:6px 0 14px;text-align:center;font-weight:700;font-size:22px;color:var(--rose-deep)}
+
+.player{position:sticky;top:8px;z-index:20;display:flex;align-items:center;gap:14px;padding:12px 16px;margin-bottom:18px;
+  background:rgba(255,255,255,.97);border:1px solid var(--rose-soft);border-radius:16px;
+  box-shadow:0 8px 22px -10px rgba(178,58,106,.4)}
+.play-btn{flex:none;display:flex;align-items:center;gap:9px;border:none;border-radius:999px;padding:11px 20px;cursor:pointer;
+  font-weight:700;font-size:16px;color:#fff;background:var(--rose);transition:background .12s,transform .12s}
+.play-btn:hover:not(:disabled){background:var(--rose-deep);transform:translateY(-1px)}
+.play-btn:active:not(:disabled){transform:translateY(1px)}
+.play-btn:disabled{cursor:not-allowed;background:#dcc9d1;color:#8f7a83}
+.play-btn:focus-visible{outline:3px solid #3b2630;outline-offset:2px}
+.play-btn .ico{display:inline-flex;width:16px;height:16px}
+.play-btn .ico svg{width:16px;height:16px;display:block}
+.player-mid{flex:1;min-width:0}
+.track{position:relative;height:9px;border-radius:99px;background:#f3dbe3;margin:14px 0 8px}
+.fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:99px;background:linear-gradient(90deg,var(--rose-soft),var(--rose));transition:width .25s linear}
+.mark{position:absolute;top:-8px;left:0;width:24px;height:24px;margin-left:-12px;color:#f0a9c0;transition:left .25s linear}
+.mark svg{width:24px;height:24px;display:block}
+.pmeta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:15px;color:var(--muted)}
+.pmeta b{color:var(--rose)}
+.pmsg{display:none;font-size:15px;margin-top:6px;color:var(--no);font-weight:700}
+.pmsg.show{display:block}
+.eq{flex:none;display:flex;align-items:flex-end;gap:3px;height:26px}
+.eq i{display:block;width:4px;height:6px;border-radius:2px;background:var(--rose-soft)}
+.player.playing .eq i{animation:eq .7s ease-in-out infinite alternate}
+.eq i:nth-child(2){animation-delay:.15s!important}.eq i:nth-child(3){animation-delay:.3s!important}
+.eq i:nth-child(4){animation-delay:.08s!important}.eq i:nth-child(5){animation-delay:.22s!important}
+@keyframes eq{from{height:5px}to{height:24px}}
+
+.q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px 16px;margin-bottom:12px;
+  transition:border-color .2s,box-shadow .2s}
+.q:hover{border-color:var(--rose-soft);box-shadow:0 6px 18px -10px rgba(178,58,106,.4)}
+.q.ok{border-color:var(--ok)}
+.q.no{border-color:var(--no)}
+.q-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;min-height:30px}
+.qn{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;padding:0 8px;
+  border-radius:50%;font-weight:700;font-size:16px;color:#fff;background:var(--rose)}
+.verdict{display:none;font-weight:700;font-size:15px;padding:2px 12px;border-radius:999px}
+.q.ok .verdict{display:inline-block;background:var(--ok);color:#fff}
+.q.no .verdict{display:inline-block;background:var(--no);color:#fff}
+.ctx{margin-bottom:4px;color:var(--muted);font-style:italic}
+.q-text{margin-bottom:10px;font-size:18px}
+.q-text.stem{font-weight:700}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;border:1px solid var(--line);border-radius:10px;
+  background:#fff;cursor:pointer;transition:border-color .12s,background .12s}
+.opt:hover{border-color:var(--rose);background:var(--rose-pale)}
+.opt input{flex:none;margin-top:6px;width:16px;height:16px;accent-color:var(--rose)}
+.opt.picked{border-color:var(--rose);background:var(--rose-pale)}
+.opt.picked.good{border-color:var(--ok);background:var(--ok-bg)}
+.opt.picked.bad{border-color:var(--no);background:var(--no-bg)}
+.letter{color:var(--rose);margin-right:2px}
+.gap{width:170px;max-width:100%;margin:0 4px;padding:2px 8px;font-size:18px;text-align:center;color:var(--ink);
+  background:var(--rose-pale);border:none;border-bottom:2px dashed var(--rose);border-radius:6px 6px 0 0}
+.gap:focus{outline:none;background:#fbdce7;border-bottom-style:solid}
+.gap.good{border-bottom:2px solid var(--ok);background:var(--ok-bg)}
+.gap.bad{border-bottom:2px solid var(--no);background:var(--no-bg)}
+.key{margin-top:10px;padding:8px 12px;border-radius:8px;background:var(--rose-pale);border:1px dashed var(--rose-soft);
+  color:var(--rose-deep);font-weight:700}
+.key:empty{display:none}
+
+.submit-row{text-align:center;margin:30px 0 14px}
+.answered-line{margin-bottom:10px;color:var(--muted);font-size:16px}
+.btn{font-weight:700;font-size:16px;border-radius:999px;padding:11px 24px;cursor:pointer;border:1px solid var(--rose);
+  color:var(--rose);background:#fff;transition:background .12s,transform .12s}
+.btn:hover:not(:disabled){background:var(--rose-pale)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn:focus-visible{outline:3px solid #3b2630;outline-offset:2px}
+.btn.main{font-size:19px;padding:14px 44px;border:none;color:#fff;background:var(--rose)}
+.btn.main:hover:not(:disabled){background:var(--rose-deep);transform:translateY(-1px)}
+
+.result{display:none;text-align:center;border-radius:16px;padding:22px 20px;margin-bottom:16px;
+  background:linear-gradient(160deg,#fff,#fdeaf0);border:1px solid var(--rose-soft);
+  box-shadow:0 10px 28px -14px rgba(178,58,106,.5)}
+.result.show{display:block;animation:pop .4s ease-out}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
+.res-label{color:var(--muted)}
+.res-score{font-weight:700;font-size:62px;line-height:1.1;color:var(--rose)}
+.res-score small{font-size:28px;color:var(--muted);font-weight:400}
+.res-msg{margin:6px 0 10px}
+.res-send{font-size:16px;color:var(--muted);margin-bottom:12px}
+.res-send.okk{color:var(--ok)}
+.res-send.fail{color:var(--no)}
+.res-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.res-actions [hidden]{display:none}
+.dots::after{content:"";animation:dots 1.2s steps(4) infinite}
+@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%,100%{content:"..."}}
+
+.hist table{width:100%;border-collapse:collapse;font-size:16px}
+.hist th,.hist td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+.hist th{color:var(--rose);font-weight:700}
+.hist .empty{color:var(--muted);font-style:italic}
+.hist .st-ok{color:var(--ok)}
+.hist .st-no{color:var(--no)}
+.foot{text-align:center;color:var(--muted);margin-top:26px;font-size:16px}
+
+.overlay{display:none;position:fixed;inset:0;z-index:80;align-items:center;justify-content:center;padding:16px;background:rgba(59,38,48,.45)}
+.modal{max-width:440px;width:100%;background:#fff;border:1px solid var(--rose-soft);border-radius:16px;padding:20px;
+  box-shadow:0 18px 40px -16px rgba(59,38,48,.5)}
+.modal h3{margin:0 0 8px;font-weight:700;font-size:24px;color:var(--rose)}
+.modal p{margin:0 0 8px}
+.unlist{max-height:30vh;overflow:auto;padding:10px 12px;border-radius:10px;background:var(--rose-pale);color:var(--rose-deep);margin-bottom:14px;line-height:1.6}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+
+.petal{position:fixed;top:-30px;z-index:60;pointer-events:none;border-radius:80% 0 80% 0;opacity:.85;animation:fall linear forwards}
+@keyframes fall{to{transform:translate(var(--dx),112vh) rotate(var(--rot))}}
+
+@media (max-width:620px){
+  body{font-size:16px}
+  .hero{padding-top:34px}
+  .hero-flower{width:52px;height:52px}
+  .deco.d1{width:160px;height:160px}
+  .deco.d2{width:170px;height:170px}
+  .player{flex-wrap:wrap;gap:10px;padding:10px 12px}
+  .eq{display:none}
+  .player-mid{flex-basis:100%;order:3}
+  .res-score{font-size:50px}
+  .q{padding:12px 14px 14px}
+  .q-text{font-size:17px}
+  .pw-row{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<svg class="sym" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="flower" viewBox="0 0 100 100">
+      <g fill="currentColor">
+        <ellipse cx="50" cy="25" rx="13" ry="21"/>
+        <ellipse cx="50" cy="25" rx="13" ry="21" transform="rotate(72 50 50)"/>
+        <ellipse cx="50" cy="25" rx="13" ry="21" transform="rotate(144 50 50)"/>
+        <ellipse cx="50" cy="25" rx="13" ry="21" transform="rotate(216 50 50)"/>
+        <ellipse cx="50" cy="25" rx="13" ry="21" transform="rotate(288 50 50)"/>
+      </g>
+      <circle cx="50" cy="50" r="9" fill="#f5d27c"/>
+    </symbol>
+  </defs>
+</svg>
+
+<svg class="deco d1" viewBox="0 0 200 200" aria-hidden="true">
+  <use href="#flower" x="50" y="30" width="120" height="120" style="color:#f3b4c8"/>
+  <use href="#flower" x="8" y="118" width="58" height="58" style="color:#f8cfdb"/>
+  <use href="#flower" x="118" y="132" width="52" height="52" style="color:#eea2bb"/>
+</svg>
+<svg class="deco d2" viewBox="0 0 200 200" aria-hidden="true">
+  <use href="#flower" x="22" y="40" width="120" height="120" style="color:#f3b4c8"/>
+  <use href="#flower" x="138" y="22" width="52" height="52" style="color:#f8cfdb"/>
+  <use href="#flower" x="130" y="120" width="62" height="62" style="color:#eea2bb"/>
+</svg>
+
+<header class="hero">
+  <svg class="hero-flower" viewBox="0 0 100 100" aria-hidden="true"><use href="#flower" width="100" height="100"/></svg>
+  <h1>Listening Test 33</h1>
+  <p>Bài nghe luyện tập trình độ B2, gồm 2 phần và 18 câu hỏi</p>
+</header>
+
+<main class="wrap">
+
+  <section class="box">
+    <h2>Trước khi vào bài</h2>
+    <ul>
+      <li>Mỗi phần nghe được phát tối đa 2 lượt. Các em được tạm dừng nhưng không tua được, nên hãy nghe thật tập trung.</li>
+      <li>Ghi họ tên vào khung bên dưới trước khi bấm nghe và trước khi nộp bài.</li>
+      <li>Nộp bài xong, kết quả được gửi thẳng cho giáo viên. Hệ thống chỉ báo câu nào đúng, câu nào sai và không hiện đáp án.</li>
+      <li>Các em có thể làm lại và nộp nhiều lần, mỗi lần nộp tính là một lần làm bài. Lượt nghe không được cấp thêm.</li>
+      <li>Khi có mật khẩu do giáo viên cung cấp, các em nghe nhiều lần tùy ý và xem được đáp án để luyện tập. Bài nộp ở chế độ này vẫn được gửi cho giáo viên.</li>
+    </ul>
+  </section>
+
+  <section class="box name-box" id="nameBox">
+    <div class="name-row">
+      <label for="studentName">Họ và tên</label>
+      <span class="chip" id="attemptChip">Chưa nộp lần nào</span>
+    </div>
+    <input type="text" id="studentName" placeholder="Nhập họ tên đầy đủ" autocomplete="off" spellcheck="false">
+    <div class="err" id="nameErr">Nhớ ghi họ tên trước khi nghe và nộp bài nhé.</div>
+  </section>
+
+  <section class="box lock-box" id="lockBox">
+    <div id="lockForm">
+      <label for="pwInput">Mật khẩu luyện tập</label>
+      <div class="pw-row">
+        <input type="password" id="pwInput" placeholder="Nhập mật khẩu nếu giáo viên đã cung cấp" autocomplete="off" spellcheck="false">
+        <button type="button" class="btn" id="pwBtn">Mở khóa</button>
+      </div>
+      <div class="err" id="pwErr">Mật khẩu chưa đúng, em thử lại nhé.</div>
+    </div>
+    <div class="lock-on" id="lockOn" hidden>
+      <span class="chip on">Chế độ luyện tập đang bật</span>
+      <span class="grow">Nghe nhiều lần tùy ý và xem được đáp án.</span>
+      <button type="button" class="btn" id="keyBtn">Hiện đáp án</button>
+      <button type="button" class="btn" id="relockBtn">Khóa lại</button>
+    </div>
+  </section>
+
+  <section class="box pend" id="pendBox" hidden>
+    <span id="pendTxt"></span>
+    <button type="button" class="btn" id="pendBtn">Gửi lại ngay</button>
+    <button type="button" class="btn" id="pendDl">Tải bài làm</button>
+  </section>
+
+  <div id="quiz"></div>
+
+  <div class="submit-row">
+    <div class="answered-line"><span class="answeredLbl">Đã làm 0/18</span></div>
+    <button type="button" class="btn main" id="submitBtn">Nộp bài</button>
+  </div>
+
+  <section class="result" id="result" aria-live="polite">
+    <div class="res-label" id="resLabel"></div>
+    <div class="res-score"><span id="resNum">0</span> <small>/ 18</small></div>
+    <div class="res-msg" id="resMsg"></div>
+    <div class="res-send" id="sendStatus"></div>
+    <div class="res-actions">
+      <button type="button" class="btn" id="jumpBtn">Đến câu sai đầu tiên</button>
+      <button type="button" class="btn" id="resendBtn" hidden>Gửi lại bài</button>
+      <button type="button" class="btn" id="dlBtn">Tải bài làm về máy</button>
+      <button type="button" class="btn" id="retryBtn">Làm lại từ đầu</button>
+    </div>
+  </section>
+
+  <section class="box hist">
+    <h2>Lịch sử làm bài</h2>
+    <div id="histBody"></div>
+  </section>
+
+  <div class="foot">Chúc các em làm bài thật tốt.</div>
+</main>
+
+<div class="overlay" id="confirmOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="modal">
+    <h3 id="confirmTitle">Còn câu chưa trả lời</h3>
+    <p>Em còn <b id="unCount">0</b> câu chưa làm:</p>
+    <div class="unlist" id="unList"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn" id="backBtn">Quay lại làm bài</button>
+      <button type="button" class="btn main" id="goBtn" style="font-size:16px;padding:11px 26px">Vẫn nộp bài</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ===================== CẤU HÌNH ===================== */
+var TEACHER_EMAIL = "ddangminh1905@gmail.com";   // Gmail nhận bài
+var WEB3FORMS_KEY = "";   // tùy chọn: access key Web3Forms của Gmail nhận bài, để trống thì chỉ dùng FormSubmit
+var MAX_LISTENS = 2;
+var STORE_PREFIX = "pinkListening33_v1_";
+var LETTERS = ["A","B","C"];
+var PW_HASH = "14aa0mf9in1";
+var KEY_BLOB = "eyIxIjp7ImEiOjB9LCIyIjp7ImEiOjF9LCIzIjp7ImEiOjF9LCI0Ijp7ImEiOjJ9LCI1Ijp7ImEiOjB9LCI2Ijp7ImEiOjJ9LCI3Ijp7ImEiOjB9LCI4Ijp7ImEiOjF9LCI5Ijp7ImEiOlsiZGVjb3JhdGlvbiIsImRlY29yYXRpb25zIl0sImsiOiJkZWNvcmF0aW9uKHMpIn0sIjEwIjp7ImEiOlsibWFya3MiLCJtYXJrIl0sImsiOiJtYXJrcyJ9LCIxMSI6eyJhIjpbImJ1ZGdldCJdLCJrIjoiYnVkZ2V0In0sIjEyIjp7ImEiOlsibGFiZWwiXSwiayI6ImxhYmVsIn0sIjEzIjp7ImEiOlsibWFudWFsIl0sImsiOiJtYW51YWwifSwiMTQiOnsiYSI6WyJtYXNrIl0sImsiOiJtYXNrIn0sIjE1Ijp7ImEiOlsidG9vdGhicnVzaCJdLCJrIjoidG9vdGhicnVzaCJ9LCIxNiI6eyJhIjpbImhhbmRsZSJdLCJrIjoiaGFuZGxlIn0sIjE3Ijp7ImEiOlsic3R1YmJvcm4iXSwiayI6InN0dWJib3JuIn0sIjE4Ijp7ImEiOlsicnViYmVyIl0sImsiOiJydWJiZXIifX0=";
+
+/* ===================== DỮ LIỆU ===================== */
+var QUESTIONS = [
+  {n:1,type:"mc",ctx:"You hear two friends talking about a hiking trip.",q:"What is the man worried about?",o:["lack of adequate climbing experience","lack of oxygen on the mountain","lack of appropriate equipment"]},
+  {n:2,type:"mc",ctx:"You hear two students talking about maintaining traditions.",q:"They agree that",o:["we should come up with new celebrations.","it is important to learn from the past.","too many customs are outdated."]},
+  {n:3,type:"mc",ctx:"You hear two students talking about a website.",q:"What does the girl think about it?",o:["It is less helpful than she’d hoped.","It is a good place to hold discussions.","Its specialist advice is interesting."]},
+  {n:4,type:"mc",ctx:"You hear a man talking to his friend about the cookery school she runs.",q:"What are the friends doing?",o:["talking over ways to attract new business","expressing disappointment in a staff member","discussing why the school is successful"]},
+  {n:5,type:"mc",ctx:"You hear part of a radio programme about modern zoos.",q:"The zoo-keeper says that he",o:["understands why some people dislike zoos.","believes animals enjoy their lives in zoos.","encourages people to take part in zoo projects."]},
+  {n:6,type:"mc",ctx:"You hear a football coach talking to his team about winning and losing.",q:"How does he feel?",o:["surprised that the team feels so positive","proud of the team’s recent success","disappointed by his team’s behaviour"]},
+  {n:7,type:"mc",ctx:"You hear two people talking about a sports event they are organising.",q:"What is the purpose of their discussion?",o:["to decide how to increase sales of certain tickets","to confirm the timetable of sports events","to reach agreement about entry prices"]},
+  {n:8,type:"mc",ctx:"You hear two friends discussing a newspaper article about physics.",q:"What surprised the man about it?",o:["how interested it made him in the subject","how inspired it made him feel","how excited he was to understand it"]},
+
+  {n:9,type:"gap",q:"Thomas took a long time to clean the ___ on the first item he restored."},
+  {n:10,type:"gap",q:"Thomas recommends looking for any ___ on an item, to find out whether it’s valuable."},
+  {n:11,type:"gap",q:"If the restored item is valuable, Thomas suggests setting yourself a ___ before starting work."},
+  {n:12,type:"gap",q:"Thomas reminds listeners to put a ___ on every part to help re-build an item."},
+  {n:13,type:"gap",q:"According to Thomas, first-time restores should refer to a ___ while working."},
+  {n:14,type:"gap",q:"Thomas always wears a particular item of clothing, glasses and a ___ while he works."},
+  {n:15,type:"gap",q:"Thomas uses a ___ to clean smaller parts of an item."},
+  {n:16,type:"gap",q:"Thomas was lucky to find a replacement ___ the same as one missing from an item he was working on."},
+  {n:17,type:"gap",q:"Thomas uses the word ‘___’ to describe an old finish which doesn’t come off easily."},
+  {n:18,type:"gap",q:"Using a certain tool made from ___ will prevent damaging a restoration item."}
+];
+var TOTAL = QUESTIONS.length;
+
+(function mergeKey(){
+  var K = JSON.parse(atob(KEY_BLOB));
+  QUESTIONS.forEach(function(q){
+    var k = K[q.n];
+    q.a = k.a;
+    if(k.k) q.k = k.k;
+  });
+})();
+
+var PARTS = [
+  {id:1,from:1,to:8,title:"Listening Part 1",
+   sub:"You will hear people talking in eight different situations. For questions 1 to 8, choose the best answer A, B or C.",
+   audio:"https://englishpracticetest.net/wp-content/uploads/2022/01/fce-practice-listening-test-33-part-1.mp3"},
+  {id:2,from:9,to:18,title:"Listening Part 2",
+   sub:"You will hear an online talk by a man called Thomas Booth about how to restore old furniture. For questions 9 to 18, complete the sentences with a word or short phrase.",
+   heading:"Restoring old furniture",
+   audio:"https://englishpracticetest.net/wp-content/uploads/2022/01/fce-practice-listening-test-33-part-2.mp3?_=2"}
+];
+
+/* ===================== TIỆN ÍCH ===================== */
+function $(id){ return document.getElementById(id); }
+function el(tag, cls, html){
+  var e = document.createElement(tag);
+  if(cls) e.className = cls;
+  if(html !== undefined) e.innerHTML = html;
+  return e;
+}
+function norm(s){
+  return (s || "").normalize("NFC").toLowerCase()
+    .replace(/[\u2018\u2019`\u00b4]/g, "'")
+    .replace(/[.,!?;:'"]/g, "")
+    .replace(/\s+/g, " ").trim();
+}
+function fmt(t){
+  t = Math.max(0, Math.floor(t || 0));
+  return Math.floor(t / 60) + ":" + (t % 60 < 10 ? "0" : "") + (t % 60);
+}
+function cyrb53(str, seed){
+  seed = seed || 0;
+  var h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+  for(var i = 0, ch; i < str.length; i++){
+    ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ===================== CHẾ ĐỘ LUYỆN TẬP (MẬT KHẨU) ===================== */
+var UNLOCK_KEY = STORE_PREFIX + "__unlocked";
+var unlocked = false;
+var keysShown = false;
+try{ unlocked = sessionStorage.getItem(UNLOCK_KEY) === "1"; }catch(e){}
+
+/* ===================== LƯU TRỮ THEO TÊN ===================== */
+var memState = {};
+function getName(){ return $("studentName").value.trim().replace(/\s+/g, " "); }
+function keyFor(name){ return STORE_PREFIX + name.normalize("NFC").toLowerCase(); }
+function freshState(){ return {listens:[0,0], attempts:[]}; }
+function loadState(name){
+  if(!name) return freshState();
+  var k = keyFor(name);
+  try{
+    var raw = localStorage.getItem(k);
+    if(raw){
+      var o = JSON.parse(raw);
+      var l = Array.isArray(o.listens) ? o.listens : [];
+      return {listens:[+l[0] || 0, +l[1] || 0], attempts: Array.isArray(o.attempts) ? o.attempts : []};
+    }
+  }catch(e){}
+  return memState[k] || freshState();
+}
+function saveState(name, st){
+  var k = keyFor(name);
+  memState[k] = st;
+  try{ localStorage.setItem(k, JSON.stringify(st)); }catch(e){}
+}
+
+/* ===================== TỰ ĐỘNG LƯU BÀI ĐANG LÀM ===================== */
+var DRAFT_PREFIX = STORE_PREFIX + "draft_";
+var LAST_NAME_KEY = STORE_PREFIX + "__lastName";
+var memDraft = {};
+function draftKey(name){ return DRAFT_PREFIX + (name ? name.normalize("NFC").toLowerCase() : "__anon"); }
+function collectAnswers(){
+  var o = {};
+  QUESTIONS.forEach(function(q){ var a = readAnswer(q); if(a !== null && a !== "") o[q.n] = a; });
+  return o;
+}
+function hasAnyAnswer(){ return Object.keys(collectAnswers()).length > 0; }
+function saveDraft(){
+  var name = getName();
+  var k = draftKey(name);
+  var d = {answers: collectAnswers(), t: Date.now()};
+  memDraft[k] = d;
+  try{
+    localStorage.setItem(k, JSON.stringify(d));
+    localStorage.setItem(LAST_NAME_KEY, name);
+  }catch(e){}
+}
+function loadDraft(name){
+  var k = draftKey(name), d = null;
+  try{
+    var raw = localStorage.getItem(k);
+    if(raw) d = JSON.parse(raw);
+  }catch(e){}
+  if(!d) d = memDraft[k];
+  if(d && d.answers && Object.keys(d.answers).length) return d.answers;
+  return null;
+}
+function clearDraft(){
+  [getName(), ""].forEach(function(n){
+    var k = draftKey(n);
+    delete memDraft[k];
+    try{ localStorage.removeItem(k); }catch(e){}
+  });
+}
+function applyAnswers(ans){
+  QUESTIONS.forEach(function(q){
+    var card = $("q" + q.n), v = ans[q.n];
+    if(!card) return;
+    if(q.type === "gap"){
+      card.querySelector(".gap").value = (v === undefined ? "" : v);
+    } else {
+      card.querySelectorAll("input[type=radio]").forEach(function(i){
+        i.checked = (v !== undefined && String(v) === i.value);
+      });
+      card.querySelectorAll(".opt").forEach(function(o){
+        o.classList.toggle("picked", o.querySelector("input").checked);
+      });
+    }
+  });
+  updateAnswered();
+}
+var saveTimer = null;
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveDraft, 300);
+}
+
+/* ===================== DỰNG TRANG ===================== */
+var ICONS = {
+  play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>',
+  pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4.5" width="4.2" height="15" rx="1" fill="currentColor"/><rect x="13.8" y="4.5" width="4.2" height="15" rx="1" fill="currentColor"/></svg>',
+  stop:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/></svg>'
+};
+var quizEl = $("quiz");
+var players = {};
+
+function buildPlayerEl(p){
+  var d = el("div", "player");
+  d.id = "player" + p.id;
+  d.setAttribute("aria-label", "Trình phát bài nghe " + p.title);
+  d.innerHTML =
+    '<button type="button" class="play-btn" id="playBtn' + p.id + '"><span class="ico" id="ico' + p.id + '"></span><span id="lbl' + p.id + '">Bắt đầu nghe</span></button>' +
+    '<div class="player-mid">' +
+      '<div class="track"><div class="fill" id="fill' + p.id + '"></div>' +
+      '<span class="mark" id="mark' + p.id + '"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#flower" width="100" height="100"/></svg></span></div>' +
+      '<div class="pmeta"><span id="time' + p.id + '">0:00 / 0:00</span><span id="listen' + p.id + '">Còn <b>2</b> lượt nghe</span><span class="answeredLbl">Đã làm 0/' + TOTAL + '</span></div>' +
+      '<div class="pmsg" id="pmsg' + p.id + '"></div>' +
+    '</div>' +
+    '<div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>';
+  var a = document.createElement("audio");
+  a.id = "aud" + p.id;
+  a.preload = "metadata";
+  a.src = p.audio;
+  d.appendChild(a);
+  return d;
+}
+
+function buildQuiz(){
+  PARTS.forEach(function(p){
+    var sec = el("section", "partWrap");
+    sec.id = "part" + p.id;
+    sec.appendChild(el("div", "part", "<h2>" + p.title + "</h2><p>" + p.sub + "</p>"));
+    sec.appendChild(buildPlayerEl(p));
+    if(p.heading) sec.appendChild(el("div", "gap-title", p.heading));
+    QUESTIONS.forEach(function(q){
+      if(q.n < p.from || q.n > p.to) return;
+      var card = el("div", "q");
+      card.id = "q" + q.n;
+      var body = "";
+      if(q.type === "mc"){
+        body = '<div class="ctx">' + q.ctx + '</div><div class="q-text stem">' + q.q + '</div><div class="opts">' +
+          q.o.map(function(t, i){
+            return '<label class="opt"><input type="radio" name="q' + q.n + '" value="' + i + '"><span><b class="letter">' + LETTERS[i] + '.</b> ' + t + '</span></label>';
+          }).join("") + '</div>';
+      } else {
+        var inp = '<input type="text" class="gap" name="q' + q.n + '" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Câu ' + q.n + '">';
+        body = '<div class="q-text">' + q.q.replace("___", inp) + '</div>';
+      }
+      card.innerHTML = '<div class="q-top"><span class="qn">' + q.n + '</span><span class="verdict"></span></div>' + body + '<div class="key"></div>';
+      sec.appendChild(card);
+    });
+    quizEl.appendChild(sec);
+  });
+}
+buildQuiz();
+
+function clearMark(card){
+  card.classList.remove("ok", "no");
+  card.querySelector(".verdict").textContent = "";
+  var g = card.querySelector(".gap");
+  if(g) g.classList.remove("good", "bad");
+  card.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("good", "bad"); });
+}
+function onAnswerChange(e){
+  var card = e.target.closest(".q");
+  if(!card) return;
+  clearMark(card);
+  if(e.target.type === "radio"){
+    card.querySelectorAll(".opt").forEach(function(o){
+      o.classList.toggle("picked", o.querySelector("input").checked);
+    });
+  }
+  updateAnswered();
+  scheduleSave();
+}
+quizEl.addEventListener("input", onAnswerChange);
+quizEl.addEventListener("change", onAnswerChange);
+
+/* ===================== ĐỌC VÀ CHẤM ===================== */
+function readAnswer(q){
+  if(q.type === "gap") return document.querySelector("#q" + q.n + " .gap").value.trim();
+  var c = document.querySelector('input[name="q' + q.n + '"]:checked');
+  return c ? c.value : null;
+}
+function isCorrect(q, a){
+  if(a === null || a === "") return false;
+  if(q.type === "mc") return +a === q.a;
+  var v = norm(a), vs = v.replace(/\s/g, "");
+  return q.a.some(function(x){ var nx = norm(x); return nx === v || nx.replace(/\s/g, "") === vs; });
+}
+function showAnswer(q, a){
+  if(a === null || a === "") return "(bỏ trống)";
+  if(q.type === "mc") return LETTERS[+a] + ". " + q.o[+a];
+  return a;
+}
+function keyText(q){
+  if(q.type === "mc") return "Đáp án: " + LETTERS[q.a] + ". " + q.o[q.a];
+  return "Đáp án: " + q.k;
+}
+function renderKeys(){
+  QUESTIONS.forEach(function(q){
+    $("q" + q.n).querySelector(".key").textContent = (unlocked && keysShown) ? keyText(q) : "";
+  });
+  $("keyBtn").textContent = keysShown ? "Ẩn đáp án" : "Hiện đáp án";
+}
+function mark(q, ok, answered){
+  var card = $("q" + q.n);
+  card.classList.remove("ok", "no");
+  card.classList.add(ok ? "ok" : "no");
+  card.querySelector(".verdict").textContent = ok ? "Đúng" : (answered ? "Chưa đúng" : "Chưa trả lời");
+  if(q.type === "gap"){
+    var g = card.querySelector(".gap");
+    g.classList.remove("good", "bad");
+    g.classList.add(ok ? "good" : "bad");
+  } else {
+    card.querySelectorAll(".opt").forEach(function(o){
+      o.classList.remove("good", "bad");
+      if(o.querySelector("input").checked) o.classList.add(ok ? "good" : "bad");
+    });
+  }
+}
+function updateAnswered(){
+  var n = 0;
+  QUESTIONS.forEach(function(q){ var a = readAnswer(q); if(a !== null && a !== "") n++; });
+  document.querySelectorAll(".answeredLbl").forEach(function(s){ s.textContent = "Đã làm " + n + "/" + TOTAL; });
+}
+
+/* ===================== TÊN VÀ LỊCH SỬ ===================== */
+function flagName(){
+  $("nameBox").classList.add("bad");
+  $("studentName").focus();
+  $("nameBox").scrollIntoView({behavior: reduceMotion ? "auto" : "smooth", block: "center"});
+}
+function renderHistory(){
+  var name = getName();
+  var body = $("histBody");
+  if(!name){
+    body.innerHTML = '<div class="empty">Ghi họ tên rồi nộp bài, lịch sử các lần làm sẽ hiện ở đây.</div>';
+    $("attemptChip").textContent = "Chưa nộp lần nào";
+    return;
+  }
+  var st = loadState(name);
+  $("attemptChip").textContent = st.attempts.length ? ("Đã nộp " + st.attempts.length + " lần") : "Chưa nộp lần nào";
+  if(!st.attempts.length){
+    body.innerHTML = '<div class="empty">Chưa có lần nộp nào.</div>';
+    return;
+  }
+  var h = '<table><tr><th>Lần</th><th>Số câu đúng</th><th>Chế độ</th><th>Thời gian nộp</th><th>Gửi GV</th></tr>';
+  st.attempts.forEach(function(a){
+    h += '<tr><td>Lần ' + a.n + '</td><td>' + a.score + ' / ' + a.total + '</td><td>' + (a.practice ? 'Luyện tập' : 'Thường') + '</td><td>' + a.time + '</td><td class="' +
+      (a.sent ? 'st-ok">Đã gửi' : 'st-no">Chưa gửi') + '</td></tr>';
+  });
+  body.innerHTML = h + '</table>';
+}
+var nameTimer = null;
+$("studentName").addEventListener("input", function(){
+  $("nameBox").classList.remove("bad");
+  clearTimeout(nameTimer);
+  nameTimer = setTimeout(function(){
+    renderHistory();
+    refreshAll();
+    if(!hasAnyAnswer()){ var d = loadDraft(getName()); if(d) applyAnswers(d); }
+  }, 300);
+});
+$("studentName").addEventListener("change", function(){ saveDraft(); });
+
+/* ===================== TRÌNH PHÁT (HAI PHẦN NGHE) ===================== */
+function setPMsg(P, t){
+  var m = $("pmsg" + P.id);
+  m.textContent = t || "";
+  m.classList.toggle("show", !!t);
+}
+function setProgress(P){
+  var pct = P.duration > 0 ? Math.min(100, (P.session.lastTime / P.duration) * 100) : 0;
+  $("fill" + P.id).style.width = pct + "%";
+  $("mark" + P.id).style.left = pct + "%";
+  $("time" + P.id).textContent = fmt(P.session.lastTime) + " / " + fmt(P.duration);
+}
+function refreshPlayer(P){
+  var btn = $("playBtn" + P.id), ico = $("ico" + P.id), lbl = $("lbl" + P.id);
+  var name = getName();
+  var used = (!unlocked && name) ? loadState(name).listens[P.id - 1] : 0;
+  var remaining = Math.max(0, MAX_LISTENS - used);
+  $("listen" + P.id).innerHTML = unlocked ? "Nghe nhiều lần tùy ý" : ("Còn <b>" + remaining + "</b> lượt nghe");
+  var playing = P.session.active && !P.audio.paused && !P.audio.ended;
+  $("player" + P.id).classList.toggle("playing", playing);
+  if(P.session.active){
+    btn.disabled = false;
+    ico.innerHTML = playing ? ICONS.pause : ICONS.play;
+    lbl.textContent = playing ? "Tạm dừng" : "Tiếp tục";
+  } else if(!unlocked && remaining <= 0){
+    btn.disabled = true;
+    ico.innerHTML = ICONS.stop;
+    lbl.textContent = "Đã hết lượt nghe";
+  } else {
+    btn.disabled = false;
+    ico.innerHTML = ICONS.play;
+    lbl.textContent = (used > 0 || P.played) ? "Nghe lại" : "Bắt đầu nghe";
+  }
+}
+function refreshAll(){
+  PARTS.forEach(function(p){ refreshPlayer(players[p.id]); });
+}
+function pauseOthers(P){
+  PARTS.forEach(function(p){
+    var o = players[p.id];
+    if(o !== P && !o.audio.paused){ try{ o.audio.pause(); }catch(e){} }
+  });
+}
+function failStart(P, msg){
+  var s = P.session;
+  if(s.active && !s.heard){
+    if(s.counted && s.name){
+      var st = loadState(s.name);
+      st.listens[P.id - 1] = Math.max(0, st.listens[P.id - 1] - 1);
+      saveState(s.name, st);
+    }
+    P.session = {active:false, heard:false, lastTime:0, lastWall:0, name:"", counted:false};
+    setProgress(P);
+  }
+  setPMsg(P, msg || "Không phát được bài nghe. Hãy kiểm tra mạng và tải lại trang, nếu vẫn lỗi thì báo giáo viên nhé.");
+  refreshPlayer(P);
+}
+function playAudio(P){
+  var pr;
+  try{ pr = P.audio.play(); }catch(e){ failStart(P); return; }
+  if(pr && pr.catch){
+    pr.catch(function(err){
+      if(err && err.name === "AbortError") return;
+      failStart(P);
+    });
+  }
+}
+function onPlayClick(P){
+  setPMsg(P, "");
+  var s = P.session;
+  if(s.active){
+    if(P.audio.paused){ pauseOthers(P); playAudio(P); } else { P.audio.pause(); }
+    return;
+  }
+  var name = getName();
+  if(!unlocked && !name){ flagName(); return; }
+  var counted = false;
+  if(!unlocked){
+    var st = loadState(name);
+    if(st.listens[P.id - 1] >= MAX_LISTENS){ refreshPlayer(P); return; }
+    st.listens[P.id - 1]++;
+    saveState(name, st);
+    counted = true;
+  }
+  pauseOthers(P);
+  P.played = true;
+  P.session = {active:true, heard:false, lastTime:0, lastWall:performance.now(), name:name, counted:counted};
+  try{ P.audio.currentTime = 0; }catch(e){}
+  setProgress(P);
+  playAudio(P);
+  refreshAll();
+}
+function wireAudio(P){
+  var a = P.audio;
+  a.addEventListener("loadedmetadata", function(){
+    if(a.duration && isFinite(a.duration)){ P.duration = a.duration; setProgress(P); }
+  });
+  a.addEventListener("playing", function(){
+    if(P.session.active){
+      P.session.heard = true;
+    } else {
+      try{ a.pause(); }catch(e){}
+    }
+    refreshPlayer(P);
+  });
+  a.addEventListener("pause", function(){ refreshPlayer(P); });
+  a.addEventListener("seeking", function(){
+    var s = P.session;
+    if(!s.active) return;
+    if(Math.abs(a.currentTime - s.lastTime) > 1.2){
+      try{ a.currentTime = s.lastTime; }catch(e){}
+    }
+  });
+  a.addEventListener("timeupdate", function(){
+    var s = P.session;
+    if(!s.active || a.seeking) return;
+    var t = a.currentTime;
+    if(Math.abs(t - s.lastTime) <= 3){
+      s.lastTime = t;
+    } else {
+      try{ a.currentTime = s.lastTime; }catch(e){}
+    }
+    if(a.duration && isFinite(a.duration)) P.duration = a.duration;
+    setProgress(P);
+  });
+  a.addEventListener("ended", function(){
+    if(P.session.active){
+      P.session.active = false;
+      P.session.lastTime = P.duration;
+      setProgress(P);
+    }
+    refreshPlayer(P);
+  });
+  a.addEventListener("error", function(){
+    if(P.session.active && !P.session.heard){
+      failStart(P);
+    } else if(!P.session.active){
+      setPMsg(P, "Chưa tải được bài nghe. Hãy kiểm tra mạng và tải lại trang, nếu vẫn lỗi thì báo giáo viên nhé.");
+    } else {
+      setPMsg(P, "Bài nghe bị gián đoạn. Bấm Tiếp tục để nghe tiếp.");
+      refreshPlayer(P);
+    }
+  });
+}
+PARTS.forEach(function(p){
+  var P = {id:p.id, audio:$("aud" + p.id), duration:0, played:false,
+    session:{active:false, heard:false, lastTime:0, lastWall:0, name:"", counted:false}};
+  players[p.id] = P;
+  wireAudio(P);
+  $("playBtn" + p.id).addEventListener("click", function(){ onPlayClick(P); });
+});
+
+/* ===================== MẬT KHẨU ===================== */
+function applyLockUI(){
+  $("lockForm").hidden = unlocked;
+  $("lockOn").hidden = !unlocked;
+  if(!unlocked){ keysShown = false; }
+  renderKeys();
+  refreshAll();
+}
+function tryUnlock(){
+  var v = $("pwInput").value.trim().toLowerCase();
+  if(v && cyrb53(v) === PW_HASH){
+    unlocked = true;
+    try{ sessionStorage.setItem(UNLOCK_KEY, "1"); }catch(e){}
+    $("lockBox").classList.remove("bad");
+    $("pwInput").value = "";
+    applyLockUI();
+  } else {
+    $("lockBox").classList.add("bad");
+    $("pwInput").focus();
+  }
+}
+$("pwBtn").addEventListener("click", tryUnlock);
+$("pwInput").addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); tryUnlock(); } });
+$("pwInput").addEventListener("input", function(){ $("lockBox").classList.remove("bad"); });
+$("keyBtn").addEventListener("click", function(){ keysShown = !keysShown; renderKeys(); });
+$("relockBtn").addEventListener("click", function(){
+  unlocked = false;
+  try{ sessionStorage.removeItem(UNLOCK_KEY); }catch(e){}
+  applyLockUI();
+});
+
+/* ===================== NỘP BÀI VÀ GỬI CHO GIÁO VIÊN ===================== */
+var lastItem = null, sending = false, flushing = false;
+var PENDING_KEY = STORE_PREFIX + "__pending";
+var memPending = [];
+
+function loadPending(){
+  try{
+    var raw = localStorage.getItem(PENDING_KEY);
+    var l = raw ? JSON.parse(raw) : [];
+    if(Array.isArray(l)){ memPending = l; return l; }
+  }catch(e){}
+  return memPending;
+}
+function savePending(list){
+  memPending = list;
+  try{ localStorage.setItem(PENDING_KEY, JSON.stringify(list)); }catch(e){}
+}
+function sameItem(x, y){ return x.name === y.name && x.attemptNo === y.attemptNo; }
+function addPending(item){
+  var l = loadPending().filter(function(x){ return !sameItem(x, item); });
+  l.push(item);
+  savePending(l);
+}
+function removePending(item){
+  savePending(loadPending().filter(function(x){ return !sameItem(x, item); }));
+}
+function markSent(name, attemptNo){
+  var st = loadState(name);
+  st.attempts.forEach(function(a){ if(a.n === attemptNo) a.sent = true; });
+  saveState(name, st);
+}
+function payloadText(p){
+  var lines = [];
+  if(p._subject) lines.push(p._subject);
+  lines.push("");
+  Object.keys(p).forEach(function(k){
+    if(k.charAt(0) === "_") return;
+    lines.push(k.replace(/_/g, " ") + ": " + p[k]);
+  });
+  return lines.join("\n");
+}
+
+/* gửi qua mạng: thử lần lượt từng đường, mỗi đường thử lại khi lỗi, có giới hạn thời gian */
+function delay(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function postJson(url, body){
+  var ctrl = (typeof AbortController !== "undefined") ? new AbortController() : null;
+  var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 20000) : null;
+  return fetch(url, {
+    method:"POST",
+    headers:{"Content-Type":"application/json", "Accept":"application/json"},
+    body:JSON.stringify(body),
+    signal: ctrl ? ctrl.signal : undefined
+  }).then(function(res){
+    if(timer) clearTimeout(timer);
+    return res.json().catch(function(){ return {}; }).then(function(data){ return {ok:res.ok, data:data || {}}; });
+  }, function(err){
+    if(timer) clearTimeout(timer);
+    throw err;
+  });
+}
+function stringify(p){
+  var o = {};
+  Object.keys(p).forEach(function(k){ o[k] = String(p[k]); });
+  return o;
+}
+function viaWeb3Forms(p){
+  return postJson("https://api.web3forms.com/submit", {
+    access_key: WEB3FORMS_KEY,
+    subject: p._subject,
+    from_name: p.Ho_ten,
+    name: p.Ho_ten,
+    score: p.Diem,
+    answers: payloadText(p)
+  }).then(function(r){
+    if(!(r.ok && r.data.success === true)) throw new Error("web3forms");
+  });
+}
+function viaFormSubmit(p){
+  return postJson("https://formsubmit.co/ajax/" + TEACHER_EMAIL, stringify(p)).then(function(r){
+    var s = r.data.success;
+    if(!r.ok || s === false || s === "false") throw new Error(r.data.message || "formsubmit");
+  });
+}
+function withRetry(fn, p, times){
+  return fn(p).catch(function(err){
+    if(times <= 1) throw err;
+    return delay(1500).then(function(){ return withRetry(fn, p, times - 1); });
+  });
+}
+function trySend(p){
+  var routes = [];
+  if(WEB3FORMS_KEY) routes.push(viaWeb3Forms);
+  routes.push(viaFormSubmit);
+  var i = 0;
+  function next(err){
+    if(i >= routes.length) return Promise.reject(err || new Error("send failed"));
+    return withRetry(routes[i++], p, 2).catch(next);
+  }
+  return next();
+}
+
+function updatePendBox(msg){
+  var n = loadPending().length;
+  var box = $("pendBox");
+  if(sending || n === 0){ box.hidden = true; return; }
+  box.hidden = false;
+  $("pendTxt").textContent = msg || ("Còn " + n + " bài chưa gửi được cho giáo viên (đã lưu trên máy, không bị mất).");
+  $("pendBtn").disabled = !!msg;
+}
+function flushPending(){
+  if(flushing || sending) return;
+  var list = loadPending().slice();
+  if(!list.length){ updatePendBox(); return; }
+  flushing = true;
+  updatePendBox("Đang gửi lại bài chưa gửi được...");
+  var chain = Promise.resolve();
+  list.forEach(function(it){
+    chain = chain.then(function(){
+      return trySend(it.payload).then(function(){
+        removePending(it);
+        markSent(it.name, it.attemptNo);
+      }).catch(function(){});
+    });
+  });
+  chain.then(function(){
+    flushing = false;
+    renderHistory();
+    updatePendBox();
+  });
+}
+function doSend(item){
+  var status = $("sendStatus");
+  sending = true;
+  lastItem = item;
+  $("submitBtn").disabled = true;
+  $("resendBtn").hidden = true;
+  updatePendBox();
+  status.className = "res-send";
+  status.innerHTML = '<span class="dots">Đang gửi bài cho giáo viên</span>';
+  return trySend(item.payload).then(function(){
+    removePending(item);
+    markSent(item.name, item.attemptNo);
+    status.className = "res-send okk";
+    status.textContent = "Bài làm lần " + item.attemptNo + " đã được gửi cho giáo viên.";
+  }).catch(function(){
+    status.className = "res-send fail";
+    var hint = (location.protocol === "file:") ? " Trang đang mở trực tiếp từ file trên máy, hãy mở bằng đường link của lớp để gửi được." : "";
+    status.textContent = "Chưa gửi được bài, nhưng bài làm đã được lưu trên máy. Kiểm tra mạng rồi bấm Gửi lại bài, hoặc bấm Tải bài làm về máy để gửi file cho giáo viên." + hint;
+    $("resendBtn").hidden = false;
+  }).then(function(){
+    sending = false;
+    $("submitBtn").disabled = false;
+    renderHistory();
+    updatePendBox();
+  });
+}
+function downloadBackup(){
+  var it = lastItem || loadPending()[0];
+  if(!it){ window.alert("Chưa có bài nào để tải."); return; }
+  var nm = (it.name || "hoc-sinh").replace(/[^\w\-]+/g, "_");
+  var blob = new Blob([payloadText(it.payload)], {type:"text/plain;charset=utf-8"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "listening-test-33-" + nm + "-lan" + it.attemptNo + ".txt";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+}
+function messageFor(score){
+  if(score === TOTAL) return "Em trả lời đúng 18 câu, kết quả rất tốt.";
+  if(score >= 16) return "Kết quả rất tốt, còn một vài câu cần xem lại.";
+  if(score >= 13) return "Khá tốt rồi. Xem lại các câu đỏ và thử sửa nhé.";
+  if(score >= 9) return "Em đã làm được hơn một nửa số câu. Xem lại các câu đỏ và thử sửa nhé.";
+  return "Chưa được như ý, nhưng em có thể làm lại. Cứ bình tĩnh xem lại các câu đỏ.";
+}
+function celebrate(score){
+  if(reduceMotion) return;
+  var colors = ["#f4b6c9","#f8cfdb","#eea2bb"];
+  var n = score === TOTAL ? 40 : 24;
+  for(var i = 0; i < n; i++){
+    (function(i){
+      setTimeout(function(){
+        var f = el("span", "petal");
+        var sz = 10 + Math.random() * 10;
+        f.style.width = sz + "px";
+        f.style.height = sz + "px";
+        f.style.background = colors[Math.floor(Math.random() * colors.length)];
+        f.style.left = (Math.random() * 100) + "vw";
+        f.style.setProperty("--dx", (Math.random() * 160 - 80) + "px");
+        f.style.setProperty("--rot", (Math.random() * 720 - 360) + "deg");
+        f.style.animationDuration = (3 + Math.random() * 2.5) + "s";
+        document.body.appendChild(f);
+        f.addEventListener("animationend", function(){ f.remove(); });
+      }, i * 80);
+    })(i);
+  }
+}
+function pad2(n){ return (n < 10 ? "0" : "") + n; }
+function submitQuiz(){
+  if(sending) return;
+  var name = getName();
+  if(!name){ flagName(); return; }
+  var st = loadState(name);
+  var attemptNo = st.attempts.length + 1;
+  var score = 0, rows = {}, blank = 0;
+  var practice = unlocked;
+
+  QUESTIONS.forEach(function(q){
+    var a = readAnswer(q);
+    var answered = !(a === null || a === "");
+    var ok = isCorrect(q, a);
+    if(ok) score++;
+    if(!answered) blank++;
+    mark(q, ok, answered);
+    rows["Cau_" + pad2(q.n)] = showAnswer(q, a) + "  =>  " + (ok ? "Đúng" : "Sai");
+  });
+
+  var when = new Date().toLocaleString("vi-VN");
+  st.attempts.push({n:attemptNo, score:score, total:TOTAL, time:when, sent:false, practice:practice});
+  saveState(name, st);
+  saveDraft();
+  renderHistory();
+
+  $("resLabel").textContent = "Lần làm thứ " + attemptNo;
+  $("resNum").textContent = score;
+  $("resMsg").textContent = messageFor(score);
+  $("jumpBtn").hidden = score === TOTAL;
+  $("result").classList.add("show");
+
+  var payload = {
+    _subject: "Listening Test 33 | " + name + " | Lần " + attemptNo + " | " + score + "/" + TOTAL + (practice ? " | Luyện tập" : ""),
+    _template: "table",
+    _captcha: "false",
+    Ho_ten: name,
+    Lan_lam: attemptNo,
+    Diem: score + " / " + TOTAL,
+    Che_do: practice ? "Luyện tập (đã nhập mật khẩu)" : "Làm bài thường",
+    So_cau_bo_trong: blank,
+    Luot_nghe_Part_1: practice ? "Nghe tùy ý" : (Math.min(st.listens[0], MAX_LISTENS) + " / " + MAX_LISTENS),
+    Luot_nghe_Part_2: practice ? "Nghe tùy ý" : (Math.min(st.listens[1], MAX_LISTENS) + " / " + MAX_LISTENS),
+    Thoi_gian_nop: when
+  };
+  Object.keys(rows).forEach(function(k){ payload[k] = rows[k]; });
+
+  var item = {name:name, attemptNo:attemptNo, payload:payload};
+  addPending(item);   // lưu trước khi gửi, nếu tắt trang hoặc mất mạng thì lần sau tự gửi lại
+
+  $("result").scrollIntoView({behavior: reduceMotion ? "auto" : "smooth", block:"center"});
+  if(score >= 15) celebrate(score);
+  doSend(item);
+}
+function onSubmitClick(){
+  if(sending) return;
+  var name = getName();
+  if(!name){ flagName(); return; }
+  var un = QUESTIONS.filter(function(q){ var a = readAnswer(q); return a === null || a === ""; })
+    .map(function(q){ return q.n; });
+  if(un.length){
+    $("unCount").textContent = un.length;
+    $("unList").textContent = "Câu " + un.join(", ");
+    $("confirmOverlay").style.display = "flex";
+  } else {
+    submitQuiz();
+  }
+}
+$("submitBtn").addEventListener("click", onSubmitClick);
+$("backBtn").addEventListener("click", function(){ $("confirmOverlay").style.display = "none"; });
+$("goBtn").addEventListener("click", function(){ $("confirmOverlay").style.display = "none"; submitQuiz(); });
+$("resendBtn").addEventListener("click", function(){ if(lastItem && !sending) doSend(lastItem); });
+$("dlBtn").addEventListener("click", downloadBackup);
+$("pendDl").addEventListener("click", downloadBackup);
+$("pendBtn").addEventListener("click", flushPending);
+window.addEventListener("online", flushPending);
+$("jumpBtn").addEventListener("click", function(){
+  var w = document.querySelector(".q.no");
+  if(w) w.scrollIntoView({behavior: reduceMotion ? "auto" : "smooth", block:"center"});
+});
+$("retryBtn").addEventListener("click", function(){
+  var msg = unlocked ? "Xóa các câu trả lời hiện tại để làm lại?" : "Xóa các câu trả lời hiện tại để làm lại? Lượt nghe sẽ không được cấp thêm.";
+  if(!window.confirm(msg)) return;
+  QUESTIONS.forEach(function(q){
+    var card = $("q" + q.n);
+    clearMark(card);
+    card.querySelectorAll("input").forEach(function(i){
+      if(i.type === "radio") i.checked = false; else i.value = "";
+    });
+    card.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("picked"); });
+  });
+  $("result").classList.remove("show");
+  clearDraft();
+  updateAnswered();
+  window.scrollTo({top: 0, behavior: reduceMotion ? "auto" : "smooth"});
+});
+
+/* ===================== KHỞI TẠO ===================== */
+(function restoreOnLoad(){
+  var ln = "";
+  try{ ln = localStorage.getItem(LAST_NAME_KEY) || ""; }catch(e){}
+  if(ln) $("studentName").value = ln;
+  var d = loadDraft(ln);
+  if(d) applyAnswers(d);
+})();
+document.addEventListener("visibilitychange", function(){ if(document.hidden) saveDraft(); });
+window.addEventListener("pagehide", saveDraft);
+updatePendBox();
+setTimeout(flushPending, 1500);
+renderHistory();
+applyLockUI();
+updateAnswered();
+PARTS.forEach(function(p){ setProgress(players[p.id]); });
+})();
+</script>
+</body>
+</html>
